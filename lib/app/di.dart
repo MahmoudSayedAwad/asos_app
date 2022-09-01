@@ -16,6 +16,8 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../domain/usecase/filter_products_usecase.dart';
+
 final instance = GetIt.instance;
 Future<void> initAppModule() async {
   final sharedPrefs = await SharedPreferences.getInstance();
@@ -49,9 +51,11 @@ initMainModule() {
 }
 
 initProductsModule() {
-  if (!GetIt.I.isRegistered<GetProductsUseCase>()) {
+  if (!GetIt.I.isRegistered<GetProductsUseCase>()&&!GetIt.I.isRegistered<FilterProductsUseCase>()) {
     instance.registerFactory<GetProductsUseCase>(
         () => GetProductsUseCase(instance()));
-    instance.registerFactory<ProductsCubit>(() => ProductsCubit(instance()));
+    instance.registerFactory<FilterProductsUseCase>(
+            () => FilterProductsUseCase(instance()));
+    instance.registerFactory<ProductsCubit>(() => ProductsCubit(instance(),instance()));
   }
 }

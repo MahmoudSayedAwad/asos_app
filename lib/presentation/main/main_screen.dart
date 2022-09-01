@@ -31,7 +31,7 @@ class _MainViewState extends State<MainView> with TickerProviderStateMixin {
   ];
   List<Widget> pages = [
     const HomeView(),
-    CategoriesView(),
+    const CategoriesView(),
     const CartView(),
     const FavouritesView(),
     const ProfileView()

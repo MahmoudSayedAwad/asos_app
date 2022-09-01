@@ -1,3 +1,4 @@
+import 'package:asos_app/presentation/resources/color_manager.dart';
 import 'package:asos_app/presentation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -190,7 +191,9 @@ class ShowProducts extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(top: 10, bottom: 40),
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(
+                            color: ColorManager.green,
+                          ),
                         ),
                       ),
                     ),

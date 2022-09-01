@@ -19,8 +19,9 @@ class Zoom extends StatelessWidget {
         create: (_) => instance<ProductsCubit>()..getProducts(id: id),
         child: ZoomDrawer(
           overlayBlur: 0.8,
+          menuScreenWidth: MediaQuery.of(context).size.width * 0.65,
           controller: z,
-          borderRadius: 24,
+          borderRadius: 0,
           style: DrawerStyle.style1,
           openCurve: Curves.fastOutSlowIn,
           disableDragGesture: false,

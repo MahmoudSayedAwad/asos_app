@@ -1,4 +1,4 @@
-import 'package:asos_app/domain/models/products.dart';
+import 'package:asos_app/app/extensions.dart';
 import 'package:asos_app/presentation/resources/color_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,118 +7,164 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'ProductsCubit/products_cubit.dart';
 import 'ProductsCubit/products_states.dart';
 
-class Menu extends StatelessWidget {
+class Menu extends StatefulWidget {
   Menu({
     Key? key,
     required this.id,
   }) : super(key: key);
   final ScrollController scrollController = ScrollController();
   final String id;
+  int selectedToExpand = -1;
+  @override
+  State<Menu> createState() => _MenuState();
+}
 
+class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProductsCubit, ProductsStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          ProductsCubit productsCubit=ProductsCubit.get(context);
-          if (state is LoadingProductsState) {
-            return const Scaffold(
-                body: Center(child: CircularProgressIndicator()));
-          }
-          return Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              title: const Text(
-                'Filter',
-                style: TextStyle(color: Colors.black),
-              ),
-              leading: IconButton(
-                color: Colors.black,
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  ZoomDrawer.of(context)?.close();
-                },
-              ),
-            ),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 1,
-                      color: Colors.black,
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(color: Colors.white),
-                      child: ListView.separated(
-                        key: Key(
-                            'builder ${productsCubit.selectedToExpand.toString()}'), //attention
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return FilterMenu(
-                            i: index,
-                            items: productsCubit.productsModel,
-                            selected:
-                            productsCubit.selectedToExpand,
-                            onExpansion: productsCubit.onExpansion,
-                            categoryId: id,
-                          );
+          ProductsCubit productsCubit = ProductsCubit.get(context);
+
+          return Stack(
+            children: [
+              if (state is SuccessProductsState)
+                SizedBox(
+                  width: double.infinity,
+                  child: Scaffold(
+                    backgroundColor: ColorManager.white,
+                    appBar: AppBar(
+                      elevation: 0,
+                      backgroundColor: ColorManager.white,
+                      title: const Text(
+                        'Filter',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      leading: IconButton(
+                        color: Colors.black,
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          ZoomDrawer.of(context)?.close();
                         },
-                        separatorBuilder: (context, i) {
-                          return const SizedBox(
-                            height: 1,
-                          );
-                        },
-                        itemCount: productsCubit
-                            .productsModel
-                            .facets
-                            .length,
                       ),
                     ),
-                  ],
+                    body: SingleChildScrollView(
+                      controller: widget.scrollController,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 1,
+                            color: Colors.black,
+                          ),
+                          Container(
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                            child: ListView.separated(
+                              key: Key(
+                                  'builder ${widget.selectedToExpand.toString()}'), //attention
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return FilterMenu(
+                                  i: index,
+                                  categoryId: widget.id,
+                                  selectedToExpand: widget.selectedToExpand,
+                                );
+                              },
+                              separatorBuilder: (context, i) {
+                                return const SizedBox(
+                                  height: 1,
+                                );
+                              },
+                              itemCount:
+                                  productsCubit.productsModel.facets.length,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  productsCubit.products = [];
+                                  productsCubit.offset = 0;
+                                  productsCubit.getProducts(id: widget.id);
+                                  ZoomDrawer.of(context)?.close();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Text(
+                                    'Filter',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(color: ColorManager.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              if (state is LoadingProductsState)
+                const Center(
+                    child: CircularProgressIndicator(
+                  color: ColorManager.green,
+                )),
+            ],
           );
         });
   }
 }
 
-class FilterMenu extends StatelessWidget {
+class FilterMenu extends StatefulWidget {
   FilterMenu(
       {Key? key,
       required this.i,
-      required this.items,
-      required this.selected,
-      required this.onExpansion,
-      required this.categoryId})
-      : super(
-          key: key,
-        );
+      required this.categoryId,
+      required this.selectedToExpand})
+      : super(key: key);
   final int i;
-  final Products items;
-  int selected;
-  Function onExpansion;
   String categoryId;
+  int selectedToExpand;
 
   @override
+  State<FilterMenu> createState() => _FilterMenuState();
+}
+
+class _FilterMenuState extends State<FilterMenu> {
+  @override
   Widget build(BuildContext context) {
-    ProductsCubit cubit =ProductsCubit.get(context);
+    ProductsCubit cubit = ProductsCubit.get(context);
+
     return ExpansionTile(
+      collapsedTextColor: ColorManager.black,
+      textColor: ColorManager.green,
       onExpansionChanged: (isExpanded) {
-        onExpansion(isExpanded, i);
+        setState(() {
+          if (isExpanded) {
+            const Duration(seconds: 20000);
+            widget.selectedToExpand = widget.i;
+          } else {
+            widget.selectedToExpand = -1;
+          }
+        });
+
+        //cubit.onExpansion(isExpanded, widget.i);
       },
-      key: Key(i.toString()),
-      initiallyExpanded: i == selected,
+      key: Key(widget.i.toString()),
+      initiallyExpanded: widget.i == widget.selectedToExpand,
       expandedAlignment: Alignment.topLeft,
       title: Text(
-        items.facets[i].name,
+        cubit.productsModel.facets[widget.i].name,
         style: const TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.w500,
+          // color: ColorManager.green
         ),
       ),
       children: [
@@ -127,27 +173,53 @@ class FilterMenu extends StatelessWidget {
           child: Wrap(
             spacing: 8,
             runSpacing: 4,
-            children: items.facets[i].facetValues.map((p) {
+            children: cubit.productsModel.facets[widget.i].facetValues.map((p) {
               return FilterChip(
-                disabledColor: ColorManager.white,
-                selected: false,
-                label: Text(p.name),
+                selected: cubit.q[cubit.productsModel.facets[widget.i].id]
+                        ?.split(',')
+                        .contains(p.id) ??
+                    false,
+                label: Text(
+                  "${p.name} (${p.count})",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
                 onSelected: (bool value) {
-                  if (cubit.q[items.facets[i].id]?.isEmpty ?? true) {
-                    cubit.q[items.facets[i].id] = p.id;
-                    if (kDebugMode) {
-                      print(cubit.q[items.facets[i].id]);
+                  setState(() {
+                    if (value) {
+                      if (cubit.q[cubit.productsModel.facets[widget.i].id]
+                              ?.isEmpty ??
+                          true) {
+                        cubit.q[cubit.productsModel.facets[widget.i].id] = p.id;
+                        if (kDebugMode) {
+                          print(value);
+                          print(
+                              cubit.q[cubit.productsModel.facets[widget.i].id]);
+                        }
+                      } else {
+                        cubit.q[cubit.productsModel.facets[widget.i].id] =
+                            '${cubit.q[cubit.productsModel.facets[widget.i].id]},${p.id}';
+                        if (kDebugMode) {
+                          print(
+                              cubit.q[cubit.productsModel.facets[widget.i].id]);
+                        }
+                      }
+                    } else {
+                      cubit.q.update(cubit.productsModel.facets[widget.i].id,
+                          (value) {
+                        List<String> s = value.split(',');
+                        s.remove(p.id);
+                        String v = s.join(',');
+                        if (kDebugMode) {
+                          print(v);
+                        }
+
+                        return v;
+                      });
+                      if (kDebugMode) {
+                        print(cubit.q[cubit.productsModel.facets[widget.i].id]);
+                      }
                     }
-                  } else {
-                    cubit.q[items.facets[i].id] =
-                        '${cubit.q[items.facets[i].id]},${p.id}';
-                    if (kDebugMode) {
-                      print(cubit.q[items.facets[i].id]);
-                    }
-                  }
-                  ProductsCubit.get(context).products = [];
-                  ProductsCubit.get(context)
-                      .getProducts(id: categoryId);
+                  });
                 },
               );
             }).toList(),

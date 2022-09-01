@@ -7,11 +7,13 @@ import 'fonts_manager.dart';
 ThemeData getApplicationTheme() {
   return ThemeData(
     // main colors
-    primaryColor: ColorManager.primary,
+    primaryColor: ColorManager.green,
     primaryColorLight: ColorManager.white,
     primaryColorDark: ColorManager.grey,
     disabledColor: ColorManager.grey1,
     splashColor: ColorManager.white,
+
+    //primarySwatch: ColorManager.green,
 
     // cardview theme
     cardTheme: const CardTheme(
@@ -50,14 +52,14 @@ ThemeData getApplicationTheme() {
     buttonTheme: const ButtonThemeData(
       splashColor: ColorManager.white,
       shape: StadiumBorder(),
-      buttonColor: ColorManager.primary,
+      buttonColor: ColorManager.green,
       disabledColor: ColorManager.grey1,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         textStyle:
             getRegularStyle(color: ColorManager.white, fontSize: FontSize.s16),
-        primary: ColorManager.primary,
+        primary: ColorManager.green,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSize.s12),
         ),
