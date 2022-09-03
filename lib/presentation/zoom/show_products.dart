@@ -1,5 +1,6 @@
 import 'package:asos_app/presentation/resources/color_manager.dart';
 import 'package:asos_app/presentation/widgets/product_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/config.dart';
@@ -58,7 +59,9 @@ class ShowProducts extends StatelessWidget {
                     if (scrollController.position.pixels>
                             scrollController.position.maxScrollExtent-250 &&
                         !cubit.isFetching&&cubit.maxCount>=cubit.offset) {
-                      print("Max"+cubit.maxCount.toString()+""+cubit.offset.toString());
+                      if (kDebugMode) {
+                        print("Max${cubit.maxCount}${cubit.offset}");
+                      }
                       cubit
                         ..isFetching = true
                         ..getProducts(id: id);

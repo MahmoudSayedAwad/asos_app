@@ -6,13 +6,11 @@ import 'package:asos_app/data/network/failure.dart';
 
 import 'package:asos_app/domain/models/products.dart';
 import 'package:dartz/dartz.dart';
-
 import '../repositry/repository.dart';
 import 'base_usecase.dart';
 
 class GetProductsUseCase extends BaseUseCase<GetProductsUseCaseInput, Products> {
   Repository repository;
-
   GetProductsUseCase(this.repository);
 
   @override

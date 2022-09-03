@@ -690,7 +690,7 @@ BrandResponse _$BrandResponseFromJson(Map<String, dynamic> json) =>
     BrandResponse(
       json['brandId'] as int?,
       json['name'] as String?,
-      json['description'],
+      json['description'] as String?,
     );
 
 Map<String, dynamic> _$BrandResponseToJson(BrandResponse instance) =>

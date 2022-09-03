@@ -754,7 +754,7 @@ class BrandResponse {
 
   int? brandId;
   String? name;
-  dynamic description;
+  String? description;
   // toJson
   Map<String, dynamic> toJson() => _$BrandResponseToJson(this);
 

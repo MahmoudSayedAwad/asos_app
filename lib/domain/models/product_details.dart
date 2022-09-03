@@ -274,7 +274,7 @@ class Brand {
   );
   int brandId;
   String name;
-  dynamic description;
+  String description;
 
 }
 class LocalisedData {

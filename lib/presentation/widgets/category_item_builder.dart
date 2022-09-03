@@ -6,15 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/models/categories.dart';
 
-Widget categoryItemBuilder(BuildContext context, int index, List<Children> c,int tabIndex) {
+Widget categoryItemBuilder(
+    BuildContext context, int index, List<Children> c, int tabIndex) {
   return GestureDetector(
     onTap: () {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (ctx) => BlocProvider.value(
-                  value: context.read<AsosAppCubit>(),
-                  child: SubCategory(childIndex: index,tabIndex:tabIndex))));
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => BlocProvider.value(
+            value: context.read<AsosAppCubit>(),
+            child: SubCategory(childIndex: index, tabIndex: tabIndex),
+          ),
+        ),
+      );
     },
     child: Stack(
       alignment: AlignmentDirectional.centerStart,

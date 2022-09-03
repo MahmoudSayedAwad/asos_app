@@ -27,7 +27,7 @@ class RouteGenerator {
         initMainModule();
         return MaterialPageRoute(builder: (_) => const MainView());
       case Routes.countries:
-        return MaterialPageRoute(builder: (_) =>  CountryList());
+        return MaterialPageRoute(builder: (_) =>  const CountryList());
       case Routes.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => const OnBoardingView());
 

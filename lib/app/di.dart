@@ -10,6 +10,7 @@ import 'package:asos_app/domain/usecase/get_country_usecase.dart';
 import 'package:asos_app/domain/usecase/get_products_usecase.dart';
 import 'package:asos_app/presentation/countries_page/countries_bloc/countries_bloc.dart';
 import 'package:asos_app/presentation/main/bloc/cubit.dart';
+import 'package:asos_app/presentation/product_details/product_details_bloc/product_details_bloc.dart';
 import 'package:asos_app/presentation/zoom/ProductsCubit/products_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -17,6 +18,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/usecase/filter_products_usecase.dart';
+import '../domain/usecase/get_product_details_usecase.dart';
 
 final instance = GetIt.instance;
 Future<void> initAppModule() async {
@@ -56,6 +58,14 @@ initProductsModule() {
         () => GetProductsUseCase(instance()));
     instance.registerFactory<FilterProductsUseCase>(
             () => FilterProductsUseCase(instance()));
-    instance.registerFactory<ProductsCubit>(() => ProductsCubit(instance(),instance()));
+    instance.registerFactory<ProductsCubit>(() => ProductsCubit(instance()));
+  }
+}
+initProductDetailsModule() {
+  if (!GetIt.I.isRegistered<GetProductDetailsUseCase>()) {
+    instance.registerFactory<GetProductDetailsUseCase>(
+            () => GetProductDetailsUseCase(instance()));
+
+    instance.registerFactory<ProductDetailsCubit>(() => ProductDetailsCubit(instance()));
   }
 }

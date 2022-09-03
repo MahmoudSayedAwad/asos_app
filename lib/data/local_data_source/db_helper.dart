@@ -30,7 +30,9 @@ class SqlDb {
        
        ''');
 
-    print("email added");
+    if (kDebugMode) {
+      print("email added");
+    }
   }
 
   _onCreate(Database db, int version) async {

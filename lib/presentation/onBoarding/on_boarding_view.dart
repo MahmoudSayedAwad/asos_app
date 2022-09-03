@@ -1,6 +1,5 @@
 import 'package:asos_app/app/app_prefrences.dart';
 import 'package:asos_app/app/di.dart';
-import 'package:asos_app/presentation/countries_page/select_country.dart';
 import 'package:asos_app/presentation/resources/assets_manager.dart';
 import 'package:asos_app/presentation/resources/color_manager.dart';
 import 'package:asos_app/presentation/resources/routes_manager.dart';

@@ -16,6 +16,7 @@ import 'package:asos_app/domain/models/products.dart';
 import 'package:asos_app/domain/models/similarities.dart';
 import 'package:asos_app/domain/repositry/repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 class RepositoryImpl implements Repository {
   final NetworkInfo _networkInfo;
@@ -48,7 +49,9 @@ class RepositoryImpl implements Repository {
             country: country, language: language);
         return Right(response.toDomain());
       } catch (error) {
-        print(error.toString());
+        if (kDebugMode) {
+          print(error.toString());
+        }
         return Left(ErrorHandler.handle(error).failure);
       }
     } else {
@@ -80,9 +83,13 @@ class RepositoryImpl implements Repository {
         final response = await _remoteDataSource.getProductDetails(id, queries);
         return Right(response.toDomain());
       } catch (error) {
+        if (kDebugMode) {
+          print(error.toString());
+        }
         return Left(ErrorHandler.handle(error).failure);
       }
-    } else {
+    }
+    else {
       return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
     }
   }
@@ -96,7 +103,9 @@ class RepositoryImpl implements Repository {
             store, offset, categoryId, limit, queries);
         return Right(response.toDomain());
       } catch (error) {
-        print(error.toString());
+        if (kDebugMode) {
+          print(error.toString());
+        }
         return Left(ErrorHandler.handle(error).failure);
       }
     } else {

@@ -1,4 +1,3 @@
-import 'package:asos_app/app/extensions.dart';
 import 'package:asos_app/presentation/resources/color_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -175,7 +174,7 @@ class _FilterMenuState extends State<FilterMenu> {
             runSpacing: 4,
             children: cubit.productsModel.facets[widget.i].facetValues.map((p) {
               return FilterChip(
-                selected: cubit.q[cubit.productsModel.facets[widget.i].id]
+                selected: cubit.query[cubit.productsModel.facets[widget.i].id]
                         ?.split(',')
                         .contains(p.id) ??
                     false,
@@ -186,25 +185,25 @@ class _FilterMenuState extends State<FilterMenu> {
                 onSelected: (bool value) {
                   setState(() {
                     if (value) {
-                      if (cubit.q[cubit.productsModel.facets[widget.i].id]
+                      if (cubit.query[cubit.productsModel.facets[widget.i].id]
                               ?.isEmpty ??
                           true) {
-                        cubit.q[cubit.productsModel.facets[widget.i].id] = p.id;
+                        cubit.query[cubit.productsModel.facets[widget.i].id] = p.id;
                         if (kDebugMode) {
                           print(value);
                           print(
-                              cubit.q[cubit.productsModel.facets[widget.i].id]);
+                              cubit.query[cubit.productsModel.facets[widget.i].id]);
                         }
                       } else {
-                        cubit.q[cubit.productsModel.facets[widget.i].id] =
-                            '${cubit.q[cubit.productsModel.facets[widget.i].id]},${p.id}';
+                        cubit.query[cubit.productsModel.facets[widget.i].id] =
+                            '${cubit.query[cubit.productsModel.facets[widget.i].id]},${p.id}';
                         if (kDebugMode) {
                           print(
-                              cubit.q[cubit.productsModel.facets[widget.i].id]);
+                              cubit.query[cubit.productsModel.facets[widget.i].id]);
                         }
                       }
                     } else {
-                      cubit.q.update(cubit.productsModel.facets[widget.i].id,
+                      cubit.query.update(cubit.productsModel.facets[widget.i].id,
                           (value) {
                         List<String> s = value.split(',');
                         s.remove(p.id);
@@ -216,7 +215,7 @@ class _FilterMenuState extends State<FilterMenu> {
                         return v;
                       });
                       if (kDebugMode) {
-                        print(cubit.q[cubit.productsModel.facets[widget.i].id]);
+                        print(cubit.query[cubit.productsModel.facets[widget.i].id]);
                       }
                     }
                   });
