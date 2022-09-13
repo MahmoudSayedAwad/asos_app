@@ -52,6 +52,10 @@ dependencies:
   sqflite: ^2.0.3
   flutter_zoom_drawer: ^3.0.3
   font_awesome_flutter: ^10.1.0
+  carousel_slider: ^4.1.1
+  flutter_widget_from_html_core: ^0.8.5+3
+  ionicons: ^0.2.1
+  flutter_screenutil: ^5.5.4
 
 
 dev_dependencies:

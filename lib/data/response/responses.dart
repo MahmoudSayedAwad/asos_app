@@ -452,7 +452,7 @@ class ProductDetailsResponse {
   String? shippingRestriction;
   PriceResponse? price;
   bool? isDeadProduct;
-  String? rating;
+  RatingResponse? rating;
   ProductTypeResponse? productType;
   //List<dynamic>? plpIds;
   String? baseUrl;
@@ -479,6 +479,25 @@ class ProductTypeResponse {
 //fromJson
   factory ProductTypeResponse.fromJson(Map<String, dynamic> json) =>
       _$ProductTypeResponseFromJson(json);
+}
+@JsonSerializable()
+class RatingResponse {
+  RatingResponse(
+      this.averageOverallRating,
+      this.averageOverallStarRating,
+      this.totalReviewCount
+
+      );
+
+  double? averageOverallRating;
+  double? averageOverallStarRating;
+  double?totalReviewCount;
+  // toJson
+  Map<String, dynamic> toJson() => _$RatingResponseToJson(this);
+
+//fromJson
+  factory RatingResponse.fromJson(Map<String, dynamic> json) =>
+      _$RatingResponseFromJson(json);
 }
 
 @JsonSerializable()

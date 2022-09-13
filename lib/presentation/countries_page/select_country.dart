@@ -1,6 +1,8 @@
+import 'package:asos_app/app/app_prefrences.dart';
 import 'package:asos_app/app/di.dart';
 import 'package:asos_app/domain/models/countries.dart';
 import 'package:asos_app/presentation/countries_page/countries_bloc/countries_bloc.dart';
+import 'package:asos_app/presentation/onBoarding/on_boarding_view.dart';
 import 'package:asos_app/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,7 @@ import 'countries_bloc/countries_states.dart';
 
 class CountryList extends StatelessWidget {
   const CountryList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -16,9 +19,9 @@ class CountryList extends StatelessWidget {
       child: BlocConsumer<AsosCountriesCubit, AsosCountriesStates>(
         listener: (BuildContext context, state) {},
         builder: (BuildContext context, state) {
-
           if (state is AsosSuccessCountriesState) {
             List<Country> countries = state.countries;
+            AsosCountriesCubit countriesCubit = AsosCountriesCubit.get(context);
             return Scaffold(
               body: SafeArea(
                 child: Column(
@@ -40,7 +43,10 @@ class CountryList extends StatelessWidget {
                         ),
                         itemBuilder: (context, Country element) =>
                             GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            countriesCubit.saveCountry(element);
+                            Navigator.push(context, MaterialPageRoute(builder: (context){return const OnBoardingView();}));
+                          },
                           child: ListTile(
                             title: Text(element.name),
                           ),

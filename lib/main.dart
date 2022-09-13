@@ -10,9 +10,15 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
+
   ]);
+  SystemChrome.setSystemUIOverlayStyle( const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarBrightness: Brightness.dark,
+    statusBarIconBrightness: Brightness.dark
+  ));
+
   await initAppModule();
-  BlocOverrides.runZoned(() {
-    runApp(MyApp());
-  }, blocObserver: MyBlocObserver());
+  Bloc.observer = MyBlocObserver();
+  runApp(MyApp());
 }

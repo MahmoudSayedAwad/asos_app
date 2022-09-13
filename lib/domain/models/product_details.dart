@@ -55,7 +55,7 @@ class ProductDetails {
   String shippingRestriction;
   Price price;
   bool isDeadProduct;
-  String rating;
+  Rating rating;
   ProductType productType;
   //List<dynamic>? plpIds;
   String baseUrl;
@@ -70,7 +70,18 @@ class ProductType {
 
   int id;
   String name;
+}
+class Rating{
+  Rating(
+      this.averageOverallRating,
+      this.averageOverallStarRating,
+      this.totalReviewCount
 
+      );
+
+  double averageOverallRating;
+  double averageOverallStarRating;
+  double totalReviewCount;
 
 }
 class Price {

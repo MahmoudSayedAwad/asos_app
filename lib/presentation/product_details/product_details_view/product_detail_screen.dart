@@ -1,16 +1,18 @@
+import 'package:asos_app/app/extensions.dart';
+import 'package:asos_app/domain/models/product_details.dart';
 import 'package:asos_app/presentation/product_details/product_details_bloc/product_details_bloc.dart';
 import 'package:asos_app/presentation/product_details/product_details_bloc/product_details_states.dart';
+import 'package:asos_app/presentation/product_details/product_details_view/product_indetails.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../../app/di.dart';
 import '../../resources/color_manager.dart';
 
 class ItemDetailScreen extends StatefulWidget {
-  const ItemDetailScreen({Key? key,required this.productId}) : super(key: key);
- final String productId;
+  const ItemDetailScreen({Key? key, required this.productId}) : super(key: key);
+  final String productId;
 
   @override
   State<ItemDetailScreen> createState() => _ItemDetailScreenState();
@@ -19,133 +21,538 @@ class ItemDetailScreen extends StatefulWidget {
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return BlocProvider(
-
-      create:  (_) => instance<ProductDetailsCubit>()..getProductDetails(id:widget.productId),
-      child: BlocConsumer<ProductDetailsCubit,ProductDetailsStates>(
-        listener: (context,state){},
-        builder:(context,state){
-          if(state is SuccessProductDetailsState){
+      create: (_) => instance<ProductDetailsCubit>()
+        ..getProductDetails(id: widget.productId),
+      child: BlocConsumer<ProductDetailsCubit, ProductDetailsStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is SuccessProductDetailsState) {
+            ProductDetailsCubit cubit = ProductDetailsCubit.get(context);
             return Scaffold(
-              appBar: AppBar(
-                leading: const Icon(Icons.arrow_back_ios_outlined, color: Colors.black, size: 18.0),
-                title: const Text('SNK', style: TextStyle(fontSize: 18.0, color: Colors.black, fontFamily: 'Montserrat-black')),
-                actions: const [
-                  Padding(
-                    padding: EdgeInsets.only(right: 20.0, top: 17.0),
-                    child: FaIcon(FontAwesomeIcons.heart, color: Colors.black, size: 18.0),
-                  )
-                ],
-              ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: size.width,
-                        child: CachedNetworkImage(imageUrl: "https://scontent.fcai19-2.fna.fbcdn.net/v/t1.18169-9/27655028_100802907412584_4812417052601228228_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeGgzPbE4Y7ApDNsuMhcBSUS8etMPXW_iUjx60w9db-JSLcSvZT0TuyP8ptu3JIvWdw4dXIFq0vw3NVhJpfypCDC&_nc_ohc=Rx2tL8RrEcAAX9IBgev&_nc_ht=scontent.fcai19-2.fna&oh=00_AT8kevgW4uelLvYmC-5pgx8E2FVaVRBeVX9N2XKQQy3-mw&oe=63378552",),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: const Text('NIKE Men\'s Shoes', style: TextStyle(fontSize: 13.0, color: Colors.grey)),
-                      ),
-                      const SizedBox(height: 10.0),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text('Nike Air Huarache', style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w800, color: Colors.black)),
-                            Text('\$120', style: TextStyle(fontSize: 25.0, color: Colors.black, fontFamily: 'Montserrat-black')),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 30.0),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: const Text('Sizes', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w600, color: Colors.black)),
-                      ),
-                      const SizedBox(height: 20.0),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 10.0),
-                            _makeSizeButton('US7', true),
-                            const SizedBox(width: 8.0),
-                            _makeSizeButton('US7.5', true),
-                            const SizedBox(width: 8.0),
-                            _makeSizeButton('US8', false),
-                            const SizedBox(width: 8.0),
-                            _makeSizeButton('US8.5', true),
-                            const SizedBox(width: 8.0),
-                            _makeSizeButton('US9', true),
-                            const SizedBox(width: 8.0),
-                            _makeSizeButton('US9.5', true),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: const Text('*Faster Shipping options may be available', style:  TextStyle(fontSize: 13.0, color: Colors.grey)),
-                      ),
-                      const SizedBox(height: 30.0),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: const Text('Description', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w600, color: Colors.black)),
-                      ),
-                      const SizedBox(height: 15.0),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: const Text('Built to fit your foot and designed for comfort, the Nike Air Huarache brings back a street-level favorite. Soft leather accents on the upper mix with super-breathable, perfectly shined neoprene-like fabric for easy styling. The low-cut collar and bootie-like construction keep it sleek. Its iconic heel clip and stripped away branding keep the early \'90s look you love.', style: TextStyle(fontSize: 13.0, color: Colors.grey, height: 1.5)),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              backgroundColor: ColorManager.primary,
+              body: Body(product: cubit.productDetailsModel),
             );
-          }else if(state is LoadingProductDetailsState)
-          {
-            return  const Center(
-                child: CircularProgressIndicator(
-                  color: ColorManager.green,
-                ));
-          }else{
-            return  const Scaffold(
+          } else if (state is LoadingProductDetailsState) {
+            return const Scaffold(
               backgroundColor: ColorManager.white,
               body: Center(
                   child: CircularProgressIndicator(
-                    color: ColorManager.green,
-                  )),
+                color: ColorManager.green,
+              )),
             );
+          } else {
+            return const Center(
+                child: CircularProgressIndicator(
+              color: ColorManager.green,
+            ));
           }
-
-        } ,
-
-
+        },
       ),
     );
   }
+}
 
-  Widget _makeSizeButton(String size, bool available) {
-    return Container(
-      width: 80.0,
-      height: 30.0,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-        border: available ? Border.all(color: Colors.grey, width: 0.3) : Border.all(color: Colors.transparent, width: 0),
-        color: available ? Colors.white : Colors.grey[300],
+class Body extends StatelessWidget {
+  final ProductDetails product;
+
+  const Body({Key? key, required this.product}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      shrinkWrap: true,
+      slivers: [
+        SliverAppBar(
+          backgroundColor: Colors.transparent,
+          expandedHeight: MediaQuery.of(context).size.height * 0.38,
+          flexibleSpace: FlexibleSpaceBar(
+            background: ProductImages(product: product),
+          ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios_outlined,
+                color: Colors.black, size: 18.0),
+          ),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: 20.0, top: 17.0),
+              child: FaIcon(FontAwesomeIcons.heart,
+                  color: Colors.black, size: 18.0),
+            )
+          ],
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: TopRoundedContainer(
+            color: Colors.white,
+            child: Column(
+              children: [
+                ProductDescription(
+                  product: product,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ProductDescription extends StatefulWidget {
+  ProductDescription({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  final ProductDetails product;
+  late Variants selectedProduct = product.variants[0];
+
+  @override
+  State<ProductDescription> createState() => _ProductDescriptionState();
+}
+
+class _ProductDescriptionState extends State<ProductDescription> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              widget.product.price.current.text,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+            child: Text(
+              widget.product.name,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: const Color(
+                    0xff9f9f9f,
+                  ),
+                  fontSize: 14),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Container(
+              height: 1,
+              color: const Color(0xff9f9f9f),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.06,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 9,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ColorDot(
+                            color: widget.product.variants[0].colour.toColor(),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            widget.product.variants[0].colour,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
+                                  color: ColorManager.black,
+                                  fontSize: 18,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      width: 1,
+                      height: double.infinity,
+                      color: Color(0xff9f9f9f),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 10,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            "Size",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
+                                    fontSize: 18, color: Color(0xff9f9f9f)),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 24,
+                        ),
+                        Expanded(
+                          child: CustomDropdown(
+                            product: widget.product,
+                            selectedItem: widget.selectedProduct,
+                            onChange: (Variants? val) {
+                              setState(() {
+                                widget.selectedProduct = val!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Container(
+              height: 1,
+              color: const Color(0xff9f9f9f),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.15,
+              right: MediaQuery.of(context).size.width * 0.15,
+              bottom: 5,
+              top: 5,
+            ),
+            child: DefaultButton(
+              text: "Add To Cart",
+              press: widget.selectedProduct.isInStock ? () {} : null,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Container(
+              height: 1,
+              color: const Color(0xff9f9f9f),
+            ),
+          ),
+          ListTile(
+            title: const Text(
+              "Product Details",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 18,
+            ),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return ProductInDetails(
+                  productDetails: widget.product,
+                );
+              }));
+            },
+          ),
+        ],
       ),
-      child: Center(
-        child: Text(
-            size,
-            style: available ? const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: Colors.black) : TextStyle(fontSize: 12.5, fontWeight: FontWeight.w500, color: Colors.grey[50])
+    );
+  }
+}
+
+class CustomDropdown extends StatefulWidget {
+  CustomDropdown(
+      {Key? key,
+      required this.product,
+      required this.selectedItem,
+      this.onChange})
+      : super(key: key);
+  final ProductDetails product;
+  Variants selectedItem;
+  void Function(Variants?)? onChange;
+  @override
+  State<CustomDropdown> createState() => _CustomDropdownState();
+}
+
+class _CustomDropdownState extends State<CustomDropdown> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      isExpanded: true,
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      value: widget.selectedItem,
+      icon: const Icon(
+        Icons.keyboard_arrow_down_sharp,
+        size: 24,
+        color: Colors.black,
+      ),
+      items: widget.product.variants.map((i) {
+        return DropdownMenuItem(
+            alignment: AlignmentDirectional.center,
+            value: i,
+            child: Text(
+              i.brandSize,
+              style: TextStyle(
+                color: i.isInStock ? ColorManager.black : ColorManager.pink,
+                decoration: i.isInStock
+                    ? TextDecoration.none
+                    : TextDecoration.lineThrough,
+              ),
+            ));
+      }).toList(),
+      onChanged: widget.onChange,
+    );
+  }
+}
+
+class ColorDot extends StatelessWidget {
+  const ColorDot({
+    Key? key,
+    required this.color,
+    this.isSelected = false,
+  }) : super(key: key);
+
+  final Color color;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: const EdgeInsets.only(right: 2),
+      //  padding: const EdgeInsets.all(8),
+      height: 35,
+      width: 30,
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        border: Border.all(
+            color: isSelected ? ColorManager.green : Colors.transparent),
+        shape: BoxShape.circle,
+      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
         ),
       ),
     );
   }
 }
+
+class ProductImages extends StatefulWidget {
+  const ProductImages({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
+
+  final ProductDetails product;
+
+  @override
+  _ProductImagesState createState() => _ProductImagesState();
+}
+
+class _ProductImagesState extends State<ProductImages> {
+  int selectedImage = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.bottomCenter,
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Hero(
+              tag: widget.product.id.toString(),
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://${widget.product.media.images[selectedImage].url}',
+              ),
+            ),
+          ),
+        ),
+        if(widget.product.price.isMarkedDown)
+        Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            padding: EdgeInsets.all(15),
+            width: 64,
+            decoration: BoxDecoration(
+              color:
+              ColorManager.black,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                bottomLeft: Radius.circular(20),
+              ),
+            ),
+            child:Text("Is Selling Fast",style: TextStyle(color: ColorManager.white),),
+          ),
+        ),
+        // SizedBox(height: getProportionateScreenWidth(20)),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...List.generate(widget.product.media.images.length,
+                  (index) => buildSmallProductPreview(index)),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  GestureDetector buildSmallProductPreview(int index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedImage = index;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        margin: const EdgeInsets.only(right: 15),
+        padding: const EdgeInsets.all(8),
+        height: 48,
+        width: 48,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+              color: ColorManager.green
+                  .withOpacity(selectedImage == index ? 1 : 0)),
+        ),
+        child: CachedNetworkImage(
+          imageUrl: 'https://${widget.product.media.images[index].url}',
+        ),
+      ),
+    );
+  }
+}
+
+class TopRoundedContainer extends StatelessWidget {
+  const TopRoundedContainer({
+    Key? key,
+    required this.color,
+    required this.child,
+  }) : super(key: key);
+
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 20),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: color,
+      ),
+      child: child,
+    );
+  }
+}
+
+class RoundedIconBtn extends StatelessWidget {
+  const RoundedIconBtn({
+    Key? key,
+    required this.icon,
+    required this.press,
+    this.showShadow = false,
+  }) : super(key: key);
+
+  final IconData icon;
+  final GestureTapCancelCallback press;
+  final bool showShadow;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      width: 40,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [
+          if (showShadow)
+            BoxShadow(
+              offset: const Offset(0, 6),
+              blurRadius: 10,
+              color: const Color(0xFFB0B0B0).withOpacity(0.2),
+            ),
+        ],
+      ),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          foregroundColor: ColorManager.green,
+          padding: EdgeInsets.zero,
+          backgroundColor: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        ),
+        onPressed: press,
+        child: Icon(icon),
+      ),
+    );
+  }
+}
+
+class DefaultButton extends StatelessWidget {
+  const DefaultButton({
+    Key? key,
+    this.text,
+    this.press,
+  }) : super(key: key);
+  final String? text;
+  final Function? press;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: TextButton(
+        style: TextButton.styleFrom(
+            foregroundColor: Colors.white,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            backgroundColor: ColorManager.green,
+            disabledBackgroundColor: Colors.black45.withOpacity(0.2),
+            disabledForegroundColor: Colors.white70),
+        onPressed: press as void Function()?,
+        child: Text(
+          text!,
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+

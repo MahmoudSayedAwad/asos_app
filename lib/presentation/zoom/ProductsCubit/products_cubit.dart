@@ -3,7 +3,6 @@ import 'package:asos_app/presentation/zoom/ProductsCubit/products_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/products.dart';
 
-
 class ProductsCubit extends Cubit<ProductsStates> {
   ProductsCubit(this._getProductsUseCase) : super(ProductsInitialState());
   static ProductsCubit get(context) => BlocProvider.of(context);
@@ -15,6 +14,7 @@ class ProductsCubit extends Cubit<ProductsStates> {
   List<Product> products = [];
   Map<String, String> query = {};
   int maxCount = 0;
+  String selectedSort = "freshness";
 
   void getProducts({
     required String id,
@@ -42,8 +42,4 @@ class ProductsCubit extends Cubit<ProductsStates> {
       offset += 10;
     });
   }
-
 }
-
-
-

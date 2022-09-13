@@ -417,7 +417,9 @@ ProductDetailsResponse _$ProductDetailsResponseFromJson(
           ? null
           : PriceResponse.fromJson(json['price'] as Map<String, dynamic>),
       json['isDeadProduct'] as bool?,
-      json['rating'] as String?,
+      json['rating'] == null
+          ? null
+          : RatingResponse.fromJson(json['rating'] as Map<String, dynamic>),
       json['productType'] == null
           ? null
           : ProductTypeResponse.fromJson(
@@ -467,6 +469,20 @@ Map<String, dynamic> _$ProductTypeResponseToJson(
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+    };
+
+RatingResponse _$RatingResponseFromJson(Map<String, dynamic> json) =>
+    RatingResponse(
+      (json['averageOverallRating'] as num?)?.toDouble(),
+      (json['averageOverallStarRating'] as num?)?.toDouble(),
+      (json['totalReviewCount'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$RatingResponseToJson(RatingResponse instance) =>
+    <String, dynamic>{
+      'averageOverallRating': instance.averageOverallRating,
+      'averageOverallStarRating': instance.averageOverallStarRating,
+      'totalReviewCount': instance.totalReviewCount,
     };
 
 PriceResponse _$PriceResponseFromJson(Map<String, dynamic> json) =>

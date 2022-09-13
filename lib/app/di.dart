@@ -38,7 +38,6 @@ Future<void> initAppModule() async {
   instance.registerLazySingleton<Repository>(
       () => RepositoryImpl(instance(), instance()));
 }
-
 initMainModule() {
   if (!GetIt.I.isRegistered<GetCategoryUseCase>() &&
       !GetIt.I.isRegistered<GetCountryUseCase>()) {
@@ -48,10 +47,9 @@ initMainModule() {
         () => GetCountryUseCase(instance()));
     instance.registerFactory<AsosAppCubit>(() => AsosAppCubit(instance()));
     instance.registerFactory<AsosCountriesCubit>(
-        () => AsosCountriesCubit(instance()));
+        () => AsosCountriesCubit(instance(),instance()));
   }
 }
-
 initProductsModule() {
   if (!GetIt.I.isRegistered<GetProductsUseCase>()&&!GetIt.I.isRegistered<FilterProductsUseCase>()) {
     instance.registerFactory<GetProductsUseCase>(

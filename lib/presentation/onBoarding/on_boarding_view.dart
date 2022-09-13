@@ -1,11 +1,15 @@
 import 'package:asos_app/app/app_prefrences.dart';
 import 'package:asos_app/app/di.dart';
+import 'package:asos_app/domain/models/countries.dart';
 import 'package:asos_app/presentation/resources/assets_manager.dart';
 import 'package:asos_app/presentation/resources/color_manager.dart';
 import 'package:asos_app/presentation/resources/routes_manager.dart';
 import 'package:asos_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../countries_page/select_country.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
@@ -25,123 +29,121 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   }
   @override
   Widget build(BuildContext context) {
+   Country country=  _appPreferences.getAppCountry();
     return Scaffold(
       backgroundColor: ColorManager.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(
-            height: AppSize.s160,
-          ),
-          SvgPicture.asset(ImageAssets.splashLogo),
-          const SizedBox(
-            height: AppSize.s190,
-          ),
-          Center(
-            child: Text(
-              "DELIVER TO",
-              style: Theme.of(context).textTheme.displayLarge,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+             SizedBox(
+              height: AppSize.s160.h,
             ),
-          ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.s12),
-
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://assets.asosservices.com/storesa/images/flags/us.png"),
-                  radius: AppSize.s20,
-                ),
-                const SizedBox(
-                  width: AppSize.s8,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: FittedBox(
-                    child: Row(
-                      children: [
-                        const Text(
-                          "United States ",
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const Text(",\$ USD"),
-                        const SizedBox(width: AppSize.s4,),
-                        Text(
-                          "|",
-                          style: Theme.of(context).textTheme.displayLarge,
-                        ),
-                      ],
+            SvgPicture.asset(ImageAssets.splashLogo),
+             SizedBox(
+              height: AppSize.s190.h,
+            ),
+            Center(
+              child: Text(
+                "DELIVER TO",
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding:  EdgeInsets.symmetric(horizontal: AppSize.s12.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                   CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        country.imageUrl),
+                    radius: AppSize.s20.r,
+                  ),
+                   SizedBox(
+                    width: AppSize.s8.w,
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: FittedBox(
+                      child: Row(
+                        children: [
+                           Text(
+                            country.name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                           Text(",${country.currencies[0].text}"),
+                           SizedBox(width: AppSize.s4.w,),
+                          Text(
+                            "|",
+                            style: Theme.of(context).textTheme.displayLarge,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: FittedBox(
+                  Expanded(
+                    flex: 3,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, Routes.countries);
-                      //  Navigator.push(context, MaterialPageRoute(builder: (context)=>CountryList()));
+                      //  Navigator.pushNamed(context, Routes.countries);
+                        initMainModule();
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CountryList()));
                       },
                       style: TextButton.styleFrom(
-                          primary: ColorManager.black,
-                          textStyle: Theme.of(context)
+                          foregroundColor: ColorManager.black, textStyle: Theme.of(context)
                               .textTheme
                               .displayLarge
                               ?.copyWith(
-                                  fontSize: 12, fontWeight: FontWeight.w800),
-                          /*minimumSize: Size(40, 20),
-                        fixedSize: Size(40, 20),
-                        maximumSize: Size(50, 50),*/
+                                  fontSize: 24.sp, fontWeight: FontWeight.w600),
+
                           padding: EdgeInsets.zero),
                       child: const Text("CHANGE"),
                     ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: AppSize.s40.w, vertical: AppSize.s16.h),
+              child: ElevatedButton(
+                onPressed: () {
+                  _appPreferences.changeUserGender("men");
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorManager.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppSize.s16.r),
                   ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-            child: ElevatedButton(
-              onPressed: () {
-                _appPreferences.changeUserGender("Women");
-              },
-              style: ElevatedButton.styleFrom(
-                primary: ColorManager.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSize.s16),
+                ),
+                child:  SizedBox(
+                  width: double.infinity,
+                  height: AppSize.s40.w,
+                  child: const Center(child: Text("MEN")),
                 ),
               ),
-              child: const SizedBox(
-                width: double.infinity,
-                height: 40,
-                child: Center(child: Text("MEN")),
-              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-            child: ElevatedButton(
-              onPressed: () {
-                _appPreferences.changeUserGender("Women");
-              },
-              style: ElevatedButton.styleFrom(
-                primary: ColorManager.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSize.s16),
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: AppSize.s40.w, vertical: AppSize.s16.w),
+              child: ElevatedButton(
+                onPressed: () {
+                  _appPreferences.changeUserGender("Women");
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: ColorManager.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppSize.s16.r),
+                  ),
+                ),
+                child:  SizedBox(
+                  width: double.infinity,
+                  height: AppSize.s40.w,
+                  child: Center(child: Text("WOMEN")),
                 ),
               ),
-              child: const SizedBox(
-                width: double.infinity,
-                height: 40,
-                child: Center(child: Text("WOMEN")),
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

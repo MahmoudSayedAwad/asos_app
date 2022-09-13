@@ -130,6 +130,7 @@ class FilterMenu extends StatefulWidget {
   final int i;
   String categoryId;
   int selectedToExpand;
+  double selectedPrice=0.0;
 
   @override
   State<FilterMenu> createState() => _FilterMenuState();
@@ -167,6 +168,10 @@ class _FilterMenuState extends State<FilterMenu> {
         ),
       ),
       children: [
+       /* if(cubit.productsModel.facets[widget.i].name.toLowerCase()=="price range")
+          Slider(value: widget.selectedPrice, onChanged: (v){
+
+          }),*/
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Wrap(

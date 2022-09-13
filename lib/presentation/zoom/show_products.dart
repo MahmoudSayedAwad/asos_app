@@ -14,7 +14,7 @@ class ShowProducts extends StatelessWidget {
 
   final ScrollController scrollController = ScrollController();
   final String id;
-   ZoomDrawerController z = ZoomDrawerController();
+  ZoomDrawerController z = ZoomDrawerController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,8 @@ class ShowProducts extends StatelessWidget {
           ProductsCubit cubit = ProductsCubit.get(context);
           if (state is ProductsInitialState ||
               state is LoadingProductsState && cubit.products.isEmpty) {
-            return const Scaffold(body: Center(child: CircularProgressIndicator()));
+            return const Scaffold(
+                body: Center(child: CircularProgressIndicator()));
           } else if (state is SuccessProductsState) {
             cubit.isFetching = false;
           } else if (state is ErrorProductsState && cubit.products.isEmpty) {
@@ -38,7 +39,7 @@ class ShowProducts extends StatelessWidget {
                     onPressed: () {
                       cubit
                         ..isFetching = true
-                        ..getProducts(id:id);
+                        ..getProducts(id: id);
                     },
                     icon: const Icon(Icons.refresh),
                   ),
@@ -56,9 +57,10 @@ class ShowProducts extends StatelessWidget {
                 controller: scrollController
                   ..addListener(() {
                     //  print(scrollController.offset.toString());
-                    if (scrollController.position.pixels>
-                            scrollController.position.maxScrollExtent-250 &&
-                        !cubit.isFetching&&cubit.maxCount>=cubit.offset) {
+                    if (scrollController.position.pixels >
+                            scrollController.position.maxScrollExtent - 250 &&
+                        !cubit.isFetching &&
+                        cubit.maxCount >= cubit.offset) {
                       if (kDebugMode) {
                         print("Max${cubit.maxCount}${cubit.offset}");
                       }
@@ -134,26 +136,17 @@ class ShowProducts extends StatelessWidget {
                             Padding(
                               padding:
                                   const EdgeInsets.only(left: 8.0, right: 16),
-                              child: DropdownButton(
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                                value: "iii",
-                                icon: const Icon(
-                                  Icons.keyboard_arrow_down_sharp,
-                                  size: 25,
-                                  color: Colors.black,
-                                ),
-                                items: ["iii","lll","ooo"]
-                                    .map((i) {
-                                  return DropdownMenuItem(
-                                      value: i, child: Text(i));
-                                }).toList(),
-                                onChanged: (val) {
+                              child: SortProducts(
+                                f: (val) {
+                                  cubit.query.update(
+                                      "sort", (value) => val ?? " ",
+                                      ifAbsent: () => val!);
+                                  cubit.products = [];
+                                  cubit.offset = 0;
 
+                                  cubit.getProducts(id: id);
                                 },
+                                selected: cubit.query["sort"],
                               ),
                             ),
                           ],
@@ -210,6 +203,39 @@ class ShowProducts extends StatelessWidget {
   }
 }
 
+class SortProducts extends StatefulWidget {
+  SortProducts({Key? key, this.f, this.selected}) : super(key: key);
+  String? selected = " ";
+  Function(String?)? f;
 
+  @override
+  State<SortProducts> createState() => _SortProductsState();
+}
 
-
+class _SortProductsState extends State<SortProducts> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      ),
+      value: widget.selected,
+      icon: const Icon(
+        Icons.keyboard_arrow_down_sharp,
+        size: 25,
+        color: Colors.black,
+      ),
+      items: {
+        " ": " ",
+        "Price High To Low ": "pricedesc",
+        "Price Low To High": "priceasc",
+        "What's New": "freshness"
+      }.entries.map((e) {
+        return DropdownMenuItem(value: e.value, child: Text(e.key));
+      }).toList(),
+      onChanged: widget.f,
+    );
+  }
+}

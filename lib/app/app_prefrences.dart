@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:asos_app/app/extensions.dart';
 import 'package:asos_app/domain/models/countries.dart';
 import 'package:asos_app/presentation/resources/gender_manager.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +18,9 @@ const String PREFS_KEY_IS_USER_LOGGED_IN = "PREFS_KEY_IS_USER_LOGGED_IN";
 
 class AppPreferences {
   final SharedPreferences _sharedPreferences;
+
   AppPreferences(this._sharedPreferences);
+
   Future<String> getAppLanguage() async {
     String? language = _sharedPreferences.getString(PREFS_KEY_LANG);
     if (language != null && language.isNotEmpty) {
@@ -35,6 +40,7 @@ class AppPreferences {
       return GenderType.MEN.getValue();
     }
   }
+
   // on boarding
 
   Future<void> setOnBoardingScreenViewed() async {
@@ -95,26 +101,60 @@ class AppPreferences {
     }
   }
 
-  Future<String> getAppCountry() async {
+  Country getAppCountry()  {
     String? country = _sharedPreferences.getString(PREFS_KEY_COUNTRY);
+
     if (country != null && country.isNotEmpty) {
-      return country;
+      Map json = jsonDecode(country);
+      return Country(
+        json['country'] as String,
+        json['store'] as String,
+        json['name'] as String,
+        json['imageUrl'] as String,
+        json['siteUrl'] as String,
+        json['siteId'] as int,
+        json['majorCountry'] as String,
+        json['isDefaultCountry'] as bool,
+        json['region'] as String,
+        json['legalEntity'] as String,
+        (json['languages'] as List<dynamic>)
+            .map((e) => Languages(e['language'], e['name'], e['text'],
+                e['languageShort'], e['isPrimary']))
+            .toList(),
+        (json['currencies'] as List<dynamic>)
+            .map((e) => Currencies(e['currency'], e['symbol'], e['text'],
+                e['isPrimary'], e['currencyId']))
+            .toList(),
+        (json['sizeSchemas'] as List<dynamic>)
+            .map((e) => SizeSchemas(e['sizeSchema'], e['text'], e['isPrimary']))
+            .toList(),
+      );
     } else {
       // return default lang
-      return "USA";
+      return Country(
+          "US",
+          "US",
+          "United States",
+          "https://assets.asosservices.com/storesa/images/flags/us.png",
+          "www.asos.com/us",
+          2,
+          " ",
+          false,
+          " ",
+          " ", [
+        Languages("en-US", "American English", "American English", "en", true)
+      ], [
+        Currencies("USD", "\$", "\$ USD", true, 2)
+      ], [
+        SizeSchemas("EU", "EU", false),
+        SizeSchemas("US", "US", true)
+      ]);
     }
   }
 
   Future<void> changeCountry(Country country) async {
-    _sharedPreferences.setString("country", country.country);
-    _sharedPreferences.setString("name", country.name);
-    _sharedPreferences.setString("imageUrl", country.imageUrl);
-    _sharedPreferences.setStringList(
-        "currencies",
-        country.currencies.map((c) {
-          return c.text;
-        }).toList());
-    _sharedPreferences.setStringList(
-        "sizeSchemas", country.sizeSchemas.map((s) => s.text).toList());
+    Map<String, dynamic> json = country.countryToJson();
+    String jsonstring = jsonEncode(json);
+    _sharedPreferences.setString(PREFS_KEY_COUNTRY, jsonstring);
   }
 }

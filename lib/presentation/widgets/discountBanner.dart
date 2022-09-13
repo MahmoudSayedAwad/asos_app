@@ -14,7 +14,7 @@ class DiscountSign extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Container(
-        color: Colors.white,
+        color: Colors.white.withOpacity(0.5),
         padding: const EdgeInsets.all(5),
         child: model.price.rrp.value == 0
             ? Text(

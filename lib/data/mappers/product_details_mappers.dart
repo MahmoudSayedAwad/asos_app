@@ -39,7 +39,7 @@ extension ProductDetailsResponseMapper on ProductDetailsResponse? {
       this?.shippingRestriction.orEmpty() ?? Constants.empty,
       this!.price!.toDomain(),
       this?.isDeadProduct ?? false,
-      this?.rating.orEmpty() ?? Constants.empty,
+      this!.rating.toDomain(),
       this!.productType!.toDomain(),
       this?.baseUrl.orEmpty() ?? Constants.empty,
     );
@@ -51,6 +51,15 @@ extension ProductTypeResponseMapper on ProductTypeResponse? {
     return ProductType(
       this?.id.orZero() ?? Constants.zero,
       this?.name?.orEmpty() ?? Constants.empty,
+    );
+  }
+}
+extension RatingResponseMapper on RatingResponse? {
+  Rating toDomain() {
+    return Rating(
+      this?.averageOverallRating.orZero() ?? Constants.zero.toDouble(),
+      this?.averageOverallStarRating.orZero() ?? Constants.zero.toDouble(),
+      this?.totalReviewCount.orZero()??Constants.zero.toDouble()
     );
   }
 }
