@@ -1,16 +1,15 @@
 import 'dart:convert';
-
 import 'package:asos_app/app/extensions.dart';
 import 'package:asos_app/domain/models/countries.dart';
 import 'package:asos_app/presentation/resources/gender_manager.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../presentation/resources/language_manager.dart';
 
 const String PREFS_KEY_LANG = "PREFS_KEY_LANG";
 const String PREFS_KEY_GENDER = "PREFS_KEY_GENDER";
 const String PREFS_KEY_COUNTRY = "PREFS_KEY_COUNTRY";
+const String PREFS_KEY_SIZE_SCHEMAS = "PREFS_KEY_SIZE_SCHEMAS";
+const String PREFS_KEY_CURRENCIES = "PREFS_KEY_CURRENCIES";
+
 
 const String PREFS_KEY_ONBOARDING_SCREEN_VIEWED =
     "PREFS_KEY_ONBOARDING_SCREEN_VIEWED";
@@ -21,17 +20,9 @@ class AppPreferences {
 
   AppPreferences(this._sharedPreferences);
 
-  Future<String> getAppLanguage() async {
-    String? language = _sharedPreferences.getString(PREFS_KEY_LANG);
-    if (language != null && language.isNotEmpty) {
-      return language;
-    } else {
-      // return default lang
-      return LanguageType.ENGLISH.getValue();
-    }
-  }
 
-  Future<String> getUserGender() async {
+///////////////////////////////////////////////////////////////////
+  String getUserGender()  {
     String? gender = _sharedPreferences.getString(PREFS_KEY_GENDER);
     if (gender != null && gender.isNotEmpty) {
       return gender;
@@ -40,8 +31,18 @@ class AppPreferences {
       return GenderType.MEN.getValue();
     }
   }
+  Future<void> changeUserGender(String gender) async {
+    if (gender == GenderType.MEN.getValue()) {
+      // set english
+      _sharedPreferences.setString(PREFS_KEY_GENDER, GenderType.MEN.getValue());
+    } else {
+      // set arabic
+      _sharedPreferences.setString(
+          PREFS_KEY_GENDER, GenderType.WOMEN.getValue());
+    }
+  }
 
-  // on boarding
+  //////////////////////////////////////////////// on boarding////////////////
 
   Future<void> setOnBoardingScreenViewed() async {
     _sharedPreferences.setBool(PREFS_KEY_ONBOARDING_SCREEN_VIEWED, true);
@@ -52,20 +53,26 @@ class AppPreferences {
         false;
   }
 
-  //login
-
+  ///////////////////////////////////////////login////////
   Future<void> setUserLoggedIn() async {
     _sharedPreferences.setBool(PREFS_KEY_IS_USER_LOGGED_IN, true);
   }
-
   Future<bool> isUserLoggedIn() async {
     return _sharedPreferences.getBool(PREFS_KEY_IS_USER_LOGGED_IN) ?? false;
   }
-
   Future<void> logout() async {
     _sharedPreferences.remove(PREFS_KEY_IS_USER_LOGGED_IN);
   }
-
+  ////////////////////////////////////////////
+ /* Future<String> getAppLanguage() async {
+    String? language = _sharedPreferences.getString(PREFS_KEY_LANG);
+    if (language != null && language.isNotEmpty) {
+      return language;
+    } else {
+      // return default lang
+      return LanguageType.ENGLISH.getValue();
+    }
+  }
   Future<void> changeAppLanguage() async {
     String currentLang = await getAppLanguage();
 
@@ -78,20 +85,25 @@ class AppPreferences {
       _sharedPreferences.setString(
           PREFS_KEY_LANG, LanguageType.ARABIC.getValue());
     }
-  }
+  }*/
+  Languages getAppLanguage()  {
+    String? language = _sharedPreferences.getString(PREFS_KEY_LANG);
 
-  Future<void> changeUserGender(String gender) async {
-    if (gender == GenderType.MEN.getValue()) {
-      // set english
-      _sharedPreferences.setString(PREFS_KEY_GENDER, GenderType.MEN.getValue());
+    if (language != null && language.isNotEmpty) {
+      Map json = jsonDecode(language);
+      return Languages(json['language'],json['name'], json['text'],json['languageShort'],json ['isPrimary']);
     } else {
-      // set arabic
-      _sharedPreferences.setString(
-          PREFS_KEY_GENDER, GenderType.WOMEN.getValue());
+      // return default Currencies
+      return getAppCountry().languages.singleWhere((element) => element.isPrimary);
     }
   }
+  Future<void> changeAppLanguage(Languages languages) async {
 
-  Future<Locale> getLocal() async {
+    Map<String, dynamic> json = languages.languagesToJson();
+    String jsonstring = jsonEncode(json);
+    _sharedPreferences.setString(PREFS_KEY_LANG, jsonstring);
+  }
+ /* Future<Locale> getLocal() async {
     String currentLang = await getAppLanguage();
 
     if (currentLang == LanguageType.ARABIC.getValue()) {
@@ -99,8 +111,13 @@ class AppPreferences {
     } else {
       return ENGLISH_LOCAL;
     }
+  }*/
+  //////////////////////////////////////////
+  Future<void> changeCountry(Country country) async {
+    Map<String, dynamic> json = country.countryToJson();
+    String jsonstring = jsonEncode(json);
+    _sharedPreferences.setString(PREFS_KEY_COUNTRY, jsonstring);
   }
-
   Country getAppCountry()  {
     String? country = _sharedPreferences.getString(PREFS_KEY_COUNTRY);
 
@@ -151,10 +168,40 @@ class AppPreferences {
       ]);
     }
   }
+  ////////////////////////////////////
+  SizeSchemas getAppSizeSchemas()  {
+    String? sizeSchemas = _sharedPreferences.getString(PREFS_KEY_SIZE_SCHEMAS);
 
-  Future<void> changeCountry(Country country) async {
-    Map<String, dynamic> json = country.countryToJson();
-    String jsonstring = jsonEncode(json);
-    _sharedPreferences.setString(PREFS_KEY_COUNTRY, jsonstring);
+    if (sizeSchemas != null && sizeSchemas.isNotEmpty) {
+      Map json = jsonDecode(sizeSchemas);
+      return SizeSchemas(json['sizeSchema'], json['text'],json ['isPrimary']);
+    } else {
+      // return default sizeSchemas
+      return getAppCountry().sizeSchemas.singleWhere((element) => element.isPrimary);
+    }
   }
+  Future<void> changeSizeSchema(SizeSchemas sizeSchemas) async {
+    Map<String, dynamic> json = sizeSchemas.sizeSchemaToJson();
+    String jsonstring = jsonEncode(json);
+    _sharedPreferences.setString(PREFS_KEY_SIZE_SCHEMAS, jsonstring);
+  }
+
+  ////////////////////////////
+  Currencies getAppCurrencies()  {
+    String? currencies = _sharedPreferences.getString(PREFS_KEY_CURRENCIES);
+
+    if (currencies != null && currencies.isNotEmpty) {
+      Map json = jsonDecode(currencies);
+      return Currencies(json['currency'],json['symbol'], json['text'],json ['isPrimary'],json['currencyId']);
+    } else {
+      // return default Currencies
+      return getAppCountry().currencies.singleWhere((element) => element.isPrimary);
+    }
+  }
+  Future<void> changeCurrency(Currencies currencies) async {
+    Map<String, dynamic> json = currencies.currenciesToJson();
+    String jsonstring = jsonEncode(json);
+    _sharedPreferences.setString(PREFS_KEY_CURRENCIES, jsonstring);
+  }
+
 }

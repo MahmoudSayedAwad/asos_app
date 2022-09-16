@@ -150,9 +150,8 @@ class _CartViewState extends State<CartView> {
               height: 56,
               child: TextButton(
                 style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
+                  foregroundColor: ColorManager.white, shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  primary: ColorManager.white,
                   backgroundColor: ColorManager.green,
                 ),
                 onPressed: () {},

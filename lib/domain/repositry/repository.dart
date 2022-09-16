@@ -18,7 +18,10 @@ abstract class Repository {
       Map<String, dynamic>? queries, String store, String name);
   Future<Either<Failure,List< Country>>> getCountries({String? language});
   Future<Either<Failure,Products>> getProducts(String store, String offset, String categoryId,
-      String limit, Map<String, dynamic>? queries);
+      String limit, String? country,
+      String? currency,
+      String? sizeSchema,
+      String? lang, Map<String, dynamic>? queries);
   Future<Either<Failure, ProductDetails>> getProductDetails(
       String id, Map<String, dynamic>? queries);
   Future<Either<Failure, Similarities>> getSimilarities(

@@ -153,7 +153,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.06,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,7 +192,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
                     child: Container(
                       width: 1,
                       height: double.infinity,
-                      color: Color(0xff9f9f9f),
+                      color: const Color(0xff9f9f9f),
                     ),
                   ),
                   Expanded(
@@ -207,7 +207,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
                                 .textTheme
                                 .headlineMedium
                                 ?.copyWith(
-                                    fontSize: 18, color: Color(0xff9f9f9f)),
+                                    fontSize: 18, color: const Color(0xff9f9f9f)),
                           ),
                         ),
                         const SizedBox(
@@ -398,9 +398,9 @@ class _ProductImagesState extends State<ProductImages> {
         Align(
           alignment: Alignment.centerRight,
           child: Container(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             width: 64,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color:
               ColorManager.black,
               borderRadius: BorderRadius.only(
@@ -408,7 +408,7 @@ class _ProductImagesState extends State<ProductImages> {
                 bottomLeft: Radius.circular(20),
               ),
             ),
-            child:Text("Is Selling Fast",style: TextStyle(color: ColorManager.white),),
+            child:const Text("Is Selling Fast",style: TextStyle(color: ColorManager.white),),
           ),
         ),
         // SizedBox(height: getProportionateScreenWidth(20)),

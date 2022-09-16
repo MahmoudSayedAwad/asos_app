@@ -2,8 +2,6 @@
 import 'package:asos_app/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../presentation/onBoarding/on_boarding_view.dart';
 import '../presentation/resources/theme_manager.dart';
 
 class MyApp extends StatefulWidget {
@@ -30,13 +28,13 @@ class _MyAppState extends State<MyApp> {
         designSize: const Size(393, 830),
       builder:(context,child){
      return   MaterialApp(
-          home: const OnBoardingView(),
+        //  home: const OnBoardingView(),
           /* localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.locale,*/
           debugShowCheckedModeBanner: false,
-          // onGenerateRoute: RouteGenerator.getRoute,
-          // initialRoute: Routes.splashRoute,
+           onGenerateRoute: RouteGenerator.getRoute,
+           initialRoute: Routes.splashRoute,
           theme: getApplicationTheme(),
         );
       }

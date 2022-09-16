@@ -137,7 +137,7 @@ class ShowProducts extends StatelessWidget {
                               padding:
                                   const EdgeInsets.only(left: 8.0, right: 16),
                               child: SortProducts(
-                                f: (val) {
+                                sort: (val){
                                   cubit.query.update(
                                       "sort", (value) => val ?? " ",
                                       ifAbsent: () => val!);
@@ -146,7 +146,7 @@ class ShowProducts extends StatelessWidget {
 
                                   cubit.getProducts(id: id);
                                 },
-                                selected: cubit.query["sort"],
+                                selected:cubit.query["sort"],
                               ),
                             ),
                           ],
@@ -204,9 +204,9 @@ class ShowProducts extends StatelessWidget {
 }
 
 class SortProducts extends StatefulWidget {
-  SortProducts({Key? key, this.f, this.selected}) : super(key: key);
-  String? selected = " ";
-  Function(String?)? f;
+  SortProducts({Key? key, this.sort, this.selected}) : super(key: key);
+  String? selected = "sort";
+  Function(String?)? sort;
 
   @override
   State<SortProducts> createState() => _SortProductsState();
@@ -228,14 +228,14 @@ class _SortProductsState extends State<SortProducts> {
         color: Colors.black,
       ),
       items: {
-        " ": " ",
+        "Sort": " ",
         "Price High To Low ": "pricedesc",
         "Price Low To High": "priceasc",
         "What's New": "freshness"
       }.entries.map((e) {
         return DropdownMenuItem(value: e.value, child: Text(e.key));
       }).toList(),
-      onChanged: widget.f,
+      onChanged: widget.sort,
     );
   }
 }

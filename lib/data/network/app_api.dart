@@ -28,6 +28,10 @@ abstract class AppServiceClient {
     @Query('offset') String offset,
     @Query('categoryId') String categoryId,
     @Query('limit') String limit,
+    @Query('country')  String? country,
+    @Query('currency')  String? currency,
+    @Query('sizeschema')  String? sizeSchema,
+    @Query('lang')  String? lang,
     @Queries() Map<String, dynamic>? queries,
   );
   @GET("products/v3/detail")

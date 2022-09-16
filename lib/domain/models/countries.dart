@@ -1,4 +1,3 @@
-
 class Country {
   Country(
       this.country,
@@ -15,7 +14,6 @@ class Country {
       this.currencies,
       this.sizeSchemas);
 
-
   String country;
   String store;
   String name;
@@ -29,10 +27,6 @@ class Country {
   List<Languages> languages;
   List<Currencies> currencies;
   List<SizeSchemas> sizeSchemas;
-
-
-
-
 }
 
 class SizeSchemas {

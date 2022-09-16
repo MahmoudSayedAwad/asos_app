@@ -75,14 +75,18 @@ class _AppServiceClient implements AppServiceClient {
   }
 
   @override
-  Future<ProductsResponse> getProducts(
-      store, offset, categoryId, limit, queries) async {
+  Future<ProductsResponse> getProducts(store, offset, categoryId, limit,
+      country, currency, sizeSchema, lang, queries) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'store': store,
       r'offset': offset,
       r'categoryId': categoryId,
-      r'limit': limit
+      r'limit': limit,
+      r'country': country,
+      r'currency': currency,
+      r'sizeschema': sizeSchema,
+      r'lang': lang
     };
     queryParameters.addAll(queries ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);

@@ -17,7 +17,6 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../domain/usecase/filter_products_usecase.dart';
 import '../domain/usecase/get_product_details_usecase.dart';
 
 final instance = GetIt.instance;
@@ -45,18 +44,17 @@ initMainModule() {
         () => GetCategoryUseCase(instance()));
     instance.registerFactory<GetCountryUseCase>(
         () => GetCountryUseCase(instance()));
-    instance.registerFactory<AsosAppCubit>(() => AsosAppCubit(instance()));
+    instance.registerFactory<AsosAppCubit>(() => AsosAppCubit(instance(),instance()));
     instance.registerFactory<AsosCountriesCubit>(
         () => AsosCountriesCubit(instance(),instance()));
   }
 }
 initProductsModule() {
-  if (!GetIt.I.isRegistered<GetProductsUseCase>()&&!GetIt.I.isRegistered<FilterProductsUseCase>()) {
+  if (!GetIt.I.isRegistered<GetProductsUseCase>()) {
     instance.registerFactory<GetProductsUseCase>(
         () => GetProductsUseCase(instance()));
-    instance.registerFactory<FilterProductsUseCase>(
-            () => FilterProductsUseCase(instance()));
-    instance.registerFactory<ProductsCubit>(() => ProductsCubit(instance()));
+
+    instance.registerFactory<ProductsCubit>(() => ProductsCubit(instance(),instance()));
   }
 }
 initProductDetailsModule() {

@@ -54,7 +54,7 @@ ThemeData getApplicationTheme() {
         indicator:  ShapeDecoration(
             shape: UnderlineInputBorder(
                 borderSide:
-                    BorderSide(color: ColorManager.green, width: AppSize.s6),
+                    const BorderSide(color: ColorManager.green, width: AppSize.s6),
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(30.0.r),
                   topLeft: Radius.circular(30.0.r),
@@ -103,7 +103,7 @@ ThemeData getApplicationTheme() {
          IconThemeData(color: ColorManager.black, size: AppSize.s24.r),
     inputDecorationTheme: InputDecorationTheme(
         // content padding
-        contentPadding: const EdgeInsets.all(AppPadding.p8),
+        contentPadding:  EdgeInsets.all(AppPadding.p8.w),
         // hint style
         hintStyle:
             getRegularStyle(color: ColorManager.grey, fontSize: FontSize.s14.sp),

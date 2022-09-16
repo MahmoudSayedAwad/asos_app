@@ -8,8 +8,16 @@ abstract class RemoteDataSource {
   Future<AutoCompleteResponse> getAutoComplete(
       Map<String, dynamic>? queries, String store, String name);
   Future<List<CountryResponse>> getCountries({String? language});
-  Future<ProductsResponse> getProducts(String store, String offset,
-      String categoryId, String limit, Map<String, dynamic>? queries);
+  Future<ProductsResponse> getProducts(
+      String store,
+      String offset,
+      String categoryId,
+      String limit,
+      String? country,
+      String? currency,
+      String? sizeSchema,
+      String? lang,
+      Map<String, dynamic>? queries);
   Future<ProductDetailsResponse> getProductDetails(
       String id, Map<String, dynamic>? queries);
   Future<SimilaritiesResponse> getSimilarities(
@@ -46,9 +54,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<ProductsResponse> getProducts(String store, String offset,
-      String categoryId, String limit, Map<String, dynamic>? queries) async {
+      String categoryId, String limit, String? country,
+      String? currency,
+      String? sizeSchema,
+      String? lang, Map<String, dynamic>? queries) async {
     return await _appServiceClient.getProducts(
-        store, offset, categoryId, limit, queries);
+        store, offset, categoryId, limit,  country,
+         currency,
+         sizeSchema,
+         lang, queries);
   }
 
   @override

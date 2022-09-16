@@ -9,7 +9,7 @@ class DioFactory {
   DioFactory(this._appPreferences);
   Future<Dio> getDio() async {
     Dio dio = Dio();
-    String language = await _appPreferences.getAppLanguage();
+    String language =  _appPreferences.getAppLanguage().language;
     Map<String, String> headers = {
       'X-RapidAPI-Key': '055e54797amsh8007228cb762cbcp199966jsn992ae2ff64dc',
       'X-RapidAPI-Host': 'asos2.p.rapidapi.com'

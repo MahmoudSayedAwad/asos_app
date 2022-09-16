@@ -96,11 +96,17 @@ class RepositoryImpl implements Repository {
 
   @override
   Future<Either<Failure, Products>> getProducts(String store, String offset,
-      String categoryId, String limit, Map<String, dynamic>? queries) async {
+      String categoryId, String limit, String? country,
+      String? currency,
+      String? sizeSchema,
+      String? lang, Map<String, dynamic>? queries) async {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _remoteDataSource.getProducts(
-            store, offset, categoryId, limit, queries);
+            store, offset, categoryId, limit,  country,
+             currency,
+             sizeSchema,
+             lang, queries);
         return Right(response.toDomain());
       } catch (error) {
         if (kDebugMode) {

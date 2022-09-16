@@ -16,3 +16,11 @@ class AsosSuccessCountriesState extends AsosCountriesStates {
   List<Country> countries;
   AsosSuccessCountriesState(this.countries);
 }
+class AsosSuccessSaveCountryState extends AsosCountriesStates {
+  Country country;
+  AsosSuccessSaveCountryState(this.country);
+}
+class AsosFailedSaveCountryState extends AsosCountriesStates {
+Exception error;
+  AsosFailedSaveCountryState(this.error);
+}
